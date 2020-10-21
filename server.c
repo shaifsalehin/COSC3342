@@ -107,6 +107,11 @@ int main (int argc, char **argv){
         }
     }
     sleep(1);
+    
+    if(verbose){
+        fprintf(stdout, "Shutting down server");
+    }
+    
     close(clientConnection);
     shutdown(clientConnection, 2);
     fprintf(stdout, "====================================\n");
