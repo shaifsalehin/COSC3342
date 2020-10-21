@@ -13,13 +13,13 @@ extern int randperm(int *, int);
 
 int main (int argc, char **argv){
     struct sockaddr_in server_addr;
-    int backlog,clientConnection = 0, sock_fd = 0; // create socket variable
-    char buffer[1024];
+    int flags,backlog,clientConnection = 0, sock_fd = 0; // create socket variable
+    char buffer[1024], buff[1024];
     unsigned short int port_num;
     const char *word = "Deal";
     
     /* prints more text if true */
-    bool verbose = false;
+    bool verbose = true;
     
     
     /* Error checking for port number */
@@ -101,17 +101,21 @@ int main (int argc, char **argv){
             }   
             if (check_string == 0){
                 fprintf(stdout, "Begin dealing\n");
-                break;
+                sprintf(buff, "Begin dealing\n");
+
             }else{
                 fprintf(stdout, "Invalid command\n");
-                break;
+                sprintf(buff, "Invalid command\n");
             }
+
+            ssize_t data_sent = send(clientConnection, buff, strlen(buff), flags);
+            break;
         }
     }
     sleep(1);
     
     if(verbose){
-        fprintf(stdout, "Shutting down server");
+        fprintf(stdout, "Shutting down server\n");
     }
     fflush(stdin);
     fflush(stdout);   
