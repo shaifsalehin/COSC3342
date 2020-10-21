@@ -19,7 +19,7 @@ int main (int argc, char **argv){
     int sock_opt = 1;
     const char *word = "Deal";
     
-
+    /* Error checking for port number */
     if (argc <= 1){
        fprintf(stderr, "Error:Please provide port number. \nUsage ./[Program name] [Port number] \nServer cannot be started.\n");
           
