@@ -93,7 +93,7 @@ int main (int argc, char **argv){
             //printf("check string: %d\n",check_string);
 
                     if (check_string == 0){
-                            fprintf(stdout, "Dealing is beginning\n");
+                            fprintf(stdout, "Begin dealing\n");
                             break;
                     }else{
                             fprintf(stdout, "Invalid command\n");
