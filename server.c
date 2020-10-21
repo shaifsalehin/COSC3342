@@ -113,7 +113,8 @@ int main (int argc, char **argv){
     if(verbose){
         fprintf(stdout, "Shutting down server");
     }
-    
+    fflush(stdin);
+    fflush(stdout);   
     close(clientConnection);
     shutdown(clientConnection, 2);
     fprintf(stdout, "====================================\n");
