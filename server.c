@@ -9,6 +9,8 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+extern int randperm(int *, int);
+
 int main (int argc, char **argv){
     struct sockaddr_in server_addr;
     int backlog,clientConnection = 0, sock_fd = 0; // create socket variable
