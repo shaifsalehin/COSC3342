@@ -7,6 +7,7 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include <ctype.h>
+#include <stdbool.h>
 
 int main (int argc, char **argv){
     struct sockaddr_in server_addr;
@@ -14,6 +15,10 @@ int main (int argc, char **argv){
     char buffer[1024];
     unsigned short int port_num;
     const char *word = "Deal";
+    
+    /* prints more text if true */
+    bool verbose = false;
+    
     
     /* Error checking for port number */
     if (argc <= 1){
@@ -38,19 +43,19 @@ int main (int argc, char **argv){
 
     port_num = atoi(argv[1]);   
      
-    /* Set up our socket */
+    /* set up our socket */
     sock_fd = socket(AF_INET,SOCK_STREAM,0);
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     server_addr.sin_port = htons(port_num);
    
-   /* Creating our bind */ 
+   /* creating our bind */ 
     if (bind(sock_fd, (const struct sockaddr *)&server_addr, sizeof(server_addr))){
             printf("Bind failed\n");
             exit(1);
     }
     
-    /* Creating our listen */
+    /* creating our listen */
     if (listen (sock_fd, backlog)){
             fprintf(stderr, "Listen failed\n");
             exit (1);
@@ -61,41 +66,44 @@ int main (int argc, char **argv){
         fprintf(stdout, "====================================\n");
     while(1){
 
-        /* Creating our accept */
+        /* creating our accept */
         clientConnection = accept (sock_fd, (struct sockaddr *) &server_addr, &server_len);
         
-        /* Error checking accept */
+        /* error checking accept */
         if (clientConnection == -1){
             fprintf(stderr, "Accept failed\n");
             exit (1);
         }else{
             fprintf(stdout, "Connection successful\n");
+            
+            if(verbose){
             fprintf(stdout, "Accept value: %d\n", clientConnection);
+            }
 
-            /* Creating read function */
+            /* creating read function */
             int data_read = read (clientConnection, buffer, sizeof(buffer));
             
-            /* Check for and strip new line and carriage return in buffer */ 
-           
+            /* check for and strip new line and carriage return in buffer */ 
             buffer[strcspn(buffer, "\r\n")] = 0;
 
-            fprintf(stdout,"Looking for command '%s'\n", *&word);    
-
-
-            fprintf(stdout,"Data received: '%s'\n",buffer);
-            
+            if(verbose){
+                fprintf(stdout,"Looking for command '%s'\n", *&word);    
+                fprintf(stdout,"Command received: '%s'\n",buffer);
+            }
 
             int check_string = strcmp(buffer, word);
             
-            //printf("check string: %d\n",check_string);
+            if(verbose){
+                printf("check string: %d\n",check_string);
 
-                    if (check_string == 0){
-                            fprintf(stdout, "Begin dealing\n");
-                            break;
-                    }else{
-                            fprintf(stdout, "Invalid command\n");
-                            break;
-                    }
+            }   
+            if (check_string == 0){
+                fprintf(stdout, "Begin dealing\n");
+                break;
+            }else{
+                fprintf(stdout, "Invalid command\n");
+                break;
+            }
         }
     }
     sleep(1);
