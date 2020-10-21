@@ -7,7 +7,6 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include <ctype.h>
-#include <time.h>
 
 int main (int argc, char **argv){
     struct sockaddr_in server_addr;
@@ -25,11 +24,14 @@ int main (int argc, char **argv){
           
        exit(1);
     }
-   // if (isdigit(argv[1]) == 0){
-   //     fprintf(stderr, "Error: Invalid port number.\nServer cannot be started.\n");
-    //    exit(1);
-  //  }
+
+    /* check if number is typed (only checks for numbers, truncates any letters after the numbers) */
+    if (isdigit(*argv[1]) == 0){
+        fprintf(stderr, "Error: Invalid port number.\nServer cannot be started.\n");
+        exit(1);
+    }
     
+    /* check port range 1 - 65535 */
     if ((atoi(argv[1]) < 1) || (atoi(argv[1]) > 65535)){
            fprintf(stderr, "Error: Port number must be in range 1 - 65,535.\nServer cannot be started.\n"); 
            exit(1);
