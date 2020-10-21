@@ -80,7 +80,7 @@ int main (int argc, char **argv){
                
             /* Check for and strip new line and carriage return in buffer */ 
             size_t buffer_len = strlen(buffer);
-             for (int i = buffer_len; i >= -1; i--){
+             for (size_t i = buffer_len; i >= -1; i--){
              if ((buffer[i] == '\n') ||  (buffer[i] == '\r'))
                 buffer[i] = '\0';
             }
