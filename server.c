@@ -10,12 +10,9 @@
 
 int main (int argc, char **argv){
     struct sockaddr_in server_addr;
-    int clientConnection = 0, sock_fd = 0; // create socket variable
+    int backlog,clientConnection = 0, sock_fd = 0; // create socket variable
     char buffer[1024];
-    int flags, backlog;
     unsigned short int port_num;
-    int server_len;
-    int sock_opt = 1;
     const char *word = "Deal";
     
     /* Error checking for port number */
@@ -37,7 +34,7 @@ int main (int argc, char **argv){
            exit(1);
     }
      
-    server_len = sizeof(server_addr);
+    size_t server_len = sizeof(server_addr);
 
     port_num = atoi(argv[1]);   
      
@@ -77,15 +74,15 @@ int main (int argc, char **argv){
 
             /* Creating read function */
             int data_read = read (clientConnection, buffer, sizeof(buffer));
-               
+            
             /* Check for and strip new line and carriage return in buffer */ 
-            size_t buffer_len = strlen(buffer);
-             for (size_t i = buffer_len; i >= -1; i--){
-             if ((buffer[i] == '\n') ||  (buffer[i] == '\r'))
-                buffer[i] = '\0';
-            }
-           // fprintf(stdout,"Looking for command '%s'\n", *&word);    
-           // fprintf(stdout,"Data received: '%s'\n",buffer);
+           
+            buffer[strcspn(buffer, "\r\n")] = 0;
+
+            fprintf(stdout,"Looking for command '%s'\n", *&word);    
+
+
+            fprintf(stdout,"Data received: '%s'\n",buffer);
             
 
             int check_string = strcmp(buffer, word);
