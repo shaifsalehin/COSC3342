@@ -99,7 +99,6 @@ int main (int argc, char **argv){
                             fprintf(stdout, "Invalid command\n");
                             break;
                     }
-        fprintf(stdout, "====================================\n");
         }
     }
     sleep(1);
