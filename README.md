@@ -46,6 +46,9 @@ To send command, open another terminal while the server is started and type:
 ```$ echo "Deal" | nc server_IP server_port```
 
 For telnet (2 way communication):
+
 ```$ telnet server_IP server_port```  
 ```Deal```
+
+-------------------------
 
