@@ -15,7 +15,7 @@ Create a socket server in C. Let a client connect to the server and give command
 
 ### Setup:
 
->$ gcc -o executable_name socket_server.c randperm.c  
+>$ gcc -o executable_name socket_server.c  
 >$ ./executable_name port_number
 
 To send command, open another terminal while the server is started and type:
