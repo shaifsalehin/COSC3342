@@ -4,10 +4,12 @@
 * [Socket Server](#socket-server)
   * [Project Description](#project-description)
   * [Setup](#setup)
-  * [Troubleshoot](#troubleshoot)
+* [Card Game](#card-game)
+  * [Project Description](#project-description)
+  * [Setup](#setup)
   
 ## Socket server
-![wip](https://user-images.githubusercontent.com/47615511/96809326-41a70900-13e0-11eb-83b3-485762286ad4.png)
+![complete](https://user-images.githubusercontent.com/47615511/96832806-f6532180-1404-11eb-9618-40ba0bb5f859.png)
 
 ### Project Description
 
@@ -26,9 +28,24 @@ For telnet (2 way communication):
 
 >$ telnet server_IP server_port
 
-### Troubleshoot:
-
-- If you get Bind error, try changing to a different port:
-  - ports 0-1023 are reigistered for system use
-  - if a port was just used, it takes time for it to close
 -------------------------
+## Card Game
+![wip](https://user-images.githubusercontent.com/47615511/96809326-41a70900-13e0-11eb-83b3-485762286ad4.png)
+
+### Project Description
+
+Create a socket server. When the client connects to the server and gives the command 'Deal', the server will then respond to the client by shuffling a pack of playing cards and dealing them one by one to the client until the card deck is empty. The server will then close the connection.
+
+### Setup:
+
+>$ gcc -o executable_name card_game.c randperm.c
+>$ ./executable_name port_number
+
+To send command, open another terminal while the server is started and type:
+
+>$ echo "Deal" | nc server_IP server_port
+
+For telnet (2 way communication):
+
+>$ telnet server_IP server_port
+>Deal
