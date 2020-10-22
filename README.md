@@ -13,7 +13,7 @@
 
 ### Project Description
 
-Create a socket server in C. Let a client connect to the server and give commands. The server will then evaluate the commands and respond to the client.
+Create a socket server in C. Let a client connect to the server and give commands. The server will then evaluate the commands and respond to the client. Currently only responds to 'Deal'.
 
 ### Setup:
 
