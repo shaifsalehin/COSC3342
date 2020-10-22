@@ -38,7 +38,7 @@ Create a socket server. When the client connects to the server and gives the com
 
 ### Setup:
 
->$ gcc -o executable_name card_game.c randperm.c
+>$ gcc -o executable_name card_game.c randperm.c  
 >$ ./executable_name port_number
 
 To send command, open another terminal while the server is started and type:
@@ -47,5 +47,5 @@ To send command, open another terminal while the server is started and type:
 
 For telnet (2 way communication):
 
->$ telnet server_IP server_port
+>$ telnet server_IP server_port  
 >Deal
