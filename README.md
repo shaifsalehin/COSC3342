@@ -17,8 +17,8 @@ Create a socket server in C. Let a client connect to the server and give command
 
 ### Setup:
 
->compile: $ gcc -o executable_name socket_server.c  
->run: $ ./executable_name port_number
+compile: ```$ gcc -o executable_name socket_server.c  ```  
+run: ```$ ./executable_name port_number```
 
 To send command, open another terminal while the server is started and type:
 
