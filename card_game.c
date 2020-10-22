@@ -9,10 +9,15 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+extern int randperm(int *, int);
+
 int main (int argc, char **argv){
     struct sockaddr_in server_addr;
     
     int flags,backlog,clientConnection = 0, sock_fd = 0;
+    int cards[52];
+    
+    ssize_t data_sent;
 
     char buffer[1024], buff[1024];
 
@@ -116,18 +121,36 @@ int main (int argc, char **argv){
                     fprintf(stdout, "Match found\n");
                 }
                 fprintf(stdout, "Sending reply: Begin dealing\n");
-                sprintf(buff, "Server: Begin dealing\n");
+                sprintf(buff, "Server: Begin dealing\n"); 
+                data_sent = send(clientConnection, buff, strlen(buff), flags);
+                fflush(stdin);
+                fflush(stdout);
+
+                for (int i = 0; i <= 52; i++)
+                    cards[i]=i+1;
+                
+                randperm(cards, 52);
+
+                for (int j = 0; j <= 51; j++){
+                    if (verbose) 
+                        fprintf(stdout, "Card %d: %d\n", j+1, cards[j]);
+
+                    sprintf(buff, "Card %d: %d\n", j+1, cards[j]);
+                    data_sent = send(clientConnection, buff, strlen(buff), flags);
+                    sleep(1);
+
+                }
+            break;
 
             }else{
                 if (verbose){
                     fprintf(stdout, "Could not find match\n");
                 }
                 fprintf(stdout, "Sending reply: Invalid command\n");
-                sprintf(buff, "Server: Invalid command\n");
             }
             
             /* create send function to send message to client */
-            if (!(send(clientConnection, buff, strlen(buff), flags))){
+            if (data_sent < 0){
                     fprintf(stderr, "Error: Failed to reply to client\n");
             }else{
                         fprintf(stdout, "Reply sent successfully\n");
@@ -135,11 +158,12 @@ int main (int argc, char **argv){
             break;
         }
     }
-    sleep(1);
     
     if(verbose){
         fprintf(stdout, "Shutting down server\n");
     }
+
+
     fflush(stdin);
     fflush(stdout);   
     close(clientConnection);
