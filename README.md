@@ -45,4 +45,5 @@ To send command, open another terminal while the server is started and type:
 
 ```$ telnet server_IP server_port```  
 ```Deal```   
+
 -------------------------
