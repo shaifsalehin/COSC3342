@@ -23,6 +23,6 @@ $ echo "message" | nc server_IP server_port
 ```
 For telnet (2 way communication):
 ```
-$ telnet server_IP server_Port
+$ telnet server_IP server_port
 ```
 -------------------------
