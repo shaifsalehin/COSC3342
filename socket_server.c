@@ -110,16 +110,16 @@ int main (int argc, char **argv){
             /* server response to command received */
             }   
             if (check_string == 0){
-                fprintf(stdout, "Begin dealing\n");
+                fprintf(stdout, "Sent: Begin dealing\n");
                 sprintf(buff, "Server: Begin dealing\n");
 
             }else{
-                fprintf(stdout, "Invalid command\n");
+                fprintf(stdout, "Sent: Invalid command\n");
                 sprintf(buff, "Server: Invalid command\n");
             }
             
             /* create send function to send message to client */
-            ssize_t data_sent = send(clientConnection, buff, strlen(buff), flags);
+            send(clientConnection, buff, strlen(buff), flags);
             break;
         }
     }
