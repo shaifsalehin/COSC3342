@@ -5,7 +5,7 @@ For socket server (socket_server.c)
 
 To compile:
 
-***$ gcc -o executable_name socket_server.c randperm.c ***
+***$ gcc -o executable_name socket_server.c randperm.c***
 
 To start server:
 
