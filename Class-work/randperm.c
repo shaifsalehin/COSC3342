@@ -1,7 +1,10 @@
 #include <stdlib.h>
 #include <time.h>
-//The function randperm randomly permutes the first N elements
-//of an array r
+
+// The function randperm randomly permutes the first N elements
+// of an array r
+// Code from @melrobin
+
 int randperm(int *r,int N)
 {
     int i,j;
