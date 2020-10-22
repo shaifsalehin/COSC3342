@@ -89,6 +89,7 @@ int main (int argc, char **argv){
             
                 if(verbose){
                     fprintf(stdout, "Accept value: %d\n", clientConnection);
+                    fprintf(stdout,"Waiting for: '%s'\n", *&word);    
             }
 
             /* create read function */
@@ -98,8 +99,7 @@ int main (int argc, char **argv){
             buffer[strcspn(buffer, "\r\n")] = 0;
 
             if(verbose){
-                fprintf(stdout,"Looking for command '%s'\n", *&word);    
-                fprintf(stdout,"Command received: '%s'\n",buffer);
+                fprintf(stdout,"Client sent: '%s'\n",buffer);
             }
 
             int check_string = strcmp(buffer, word);
@@ -110,16 +110,26 @@ int main (int argc, char **argv){
             /* server response to command received */
             }   
             if (check_string == 0){
-                fprintf(stdout, "Sent: Begin dealing\n");
+                if (verbose){
+                    fprintf(stdout, "Match found\n");
+                }
+                fprintf(stdout, "Sending reply: Begin dealing\n");
                 sprintf(buff, "Server: Begin dealing\n");
 
             }else{
-                fprintf(stdout, "Sent: Invalid command\n");
+                if (verbose){
+                    fprintf(stdout, "Could not find match\n");
+                }
+                fprintf(stdout, "Sending reply: Invalid command\n");
                 sprintf(buff, "Server: Invalid command\n");
             }
             
             /* create send function to send message to client */
-            send(clientConnection, buff, strlen(buff), flags);
+            if (!(send(clientConnection, buff, strlen(buff), flags))){
+                    fprintf(stderr, "Error: Failed to reply to client\n");
+            }else{
+                        fprintf(stdout, "Reply sent successfully\n");
+            }
             break;
         }
     }
