@@ -6,7 +6,7 @@
   * [Setup](#setup)
   
 ## Socket server
-![](https://github.com/shaifsalehin/COSC3342)
+![![wip](https://user-images.githubusercontent.com/47615511/96809326-41a70900-13e0-11eb-83b3-485762286ad4.png))
 
 ### Project Description
 
