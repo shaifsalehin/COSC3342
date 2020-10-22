@@ -1,4 +1,4 @@
-# COSC3342 - Computer Networks
+# COSC3342 - Computer Networks Socket Programming
 
 ## Contents
 * [Socket Server](#socket-server)
