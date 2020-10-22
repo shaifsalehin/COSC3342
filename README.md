@@ -46,5 +46,5 @@ To send command, open another terminal while the server is started and type:
 ```$ telnet server_IP server_port```  
 ```Deal```   
 
-_Server IP is localhost if the client is on the same machine as the server_
+__Server IP is localhost if the client is on the same machine as the server__
 -------------------------
