@@ -1,7 +1,7 @@
 # COSC3342
 HBU Computer Networks Class
 
-For socket server
+For socket server (server.c)
 
 To start server:
 
