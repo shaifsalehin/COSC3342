@@ -1,4 +1,4 @@
-# COSC3342 - HBU Computer Networks Class
+# COSC3342 - Computer Networks Class
 
 ## Contents
 * [Socket Server](#socket-server)
