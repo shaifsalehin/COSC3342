@@ -1,4 +1,4 @@
-# COSC3342 - Computer Networks Class
+# COSC3342 - Computer Networks
 
 ## Contents
 * [Socket Server](#socket-server)
