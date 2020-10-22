@@ -3,9 +3,13 @@ HBU Computer Networks Class
 
 For socket server (socket_server.c)
 
+To compile:
+
+***$ gcc -o executable_name socket_server.c randperm.c ***
+
 To start server:
 
-***$./executable_name port_number***
+***$ ./executable_name port_number***
 
 To send command, open another terminal while the server is started and type:
 
