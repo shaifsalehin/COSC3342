@@ -5,8 +5,8 @@
   * [Project Description](#project-description)
   * [Setup](#setup)
 * [Card Game](#card-game)
-  * [Project Description](#project-description)
-  * [Setup](#setup)
+  * [Project Description](#project-description-1)
+  * [Setup](#setup-1)
   
 ## Socket server
 ![complete](https://user-images.githubusercontent.com/47615511/96832806-f6532180-1404-11eb-9618-40ba0bb5f859.png)
