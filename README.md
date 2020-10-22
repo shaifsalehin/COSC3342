@@ -17,16 +17,16 @@ Create a socket server in C. Let a client connect to the server and give command
 
 ### Setup:
 
-compile: ``` >$ gcc -o executable_name socket_server.c  ```  
-run: ``` >$ ./executable_name port_number```
+compile: ```$ gcc -o executable_name socket_server.c```  
+run    : ```$ ./executable_name port_number```  
 
 To send command, open another terminal while the server is started and type:
 
->$ echo "message" | nc server_IP server_port
+```$ echo "message" | nc server_IP server_port```
 
 For telnet (2 way communication):
 
->$ telnet server_IP server_port
+```$ telnet server_IP server_port```
 
 -------------------------
 ## Card Game
@@ -38,14 +38,15 @@ Create a socket server. When the client connects to the server and gives the com
 
 ### Setup:
 
->compile: $ gcc -o executable_name card_game.c randperm.c  
->run: $ ./executable_name port_number
+compile: ```$ gcc -o executable_name card_game.c randperm.c```  
+run    : ```$ ./executable_name port_number```  
 
 To send command, open another terminal while the server is started and type:
 
->$ echo "Deal" | nc server_IP server_port
+```$ echo "Deal" | nc server_IP server_port```
 
 For telnet (2 way communication):
-
->$ telnet server_IP server_port  
->Deal
+```
+$ telnet server_IP server_port
+Deal
+```
