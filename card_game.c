@@ -123,8 +123,6 @@ int main (int argc, char **argv){
                 fprintf(stdout, "Sending reply: Begin dealing\n");
                 sprintf(buff, "Server: Begin dealing\n"); 
                 data_sent = send(clientConnection, buff, strlen(buff), flags);
-                fflush(stdin);
-                fflush(stdout);
 
                 for (int i = 0; i <= 52; i++)
                     cards[i]=i+1;
@@ -174,7 +172,10 @@ int main (int argc, char **argv){
     
     if(verbose){
         fprintf(stdout, "Shutting down server\n");
-    }
+     }
+    
+    sprintf(buff, "Server: Closing connection\n");
+    data_sent = send(clientConnection, buff, strlen(buff), flags);
 
 
     fflush(stdin);
