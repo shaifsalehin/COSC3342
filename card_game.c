@@ -141,10 +141,12 @@ int main (int argc, char **argv){
                 if(j < 9){
                     sprintf(buff, "Card  %d: %d\n", j+1, cards[j]);
                     data_sent = send(clientConnection, buff, strlen(buff), flags);
+                    if (data_sent < 0) break;
                     sleep(1);
                 }else{
                     sprintf(buff, "Card %d: %d\n", j+1, cards[j]);
                     data_sent = send(clientConnection, buff, strlen(buff), flags);
+                    if (data_sent < 0) break;
                     sleep(1);
                 }
             }
@@ -158,6 +160,9 @@ int main (int argc, char **argv){
             }
             
             /* create send function to send message to client */
+            sprintf(buff, "Server: Invalid command\n");
+            data_sent = send(clientConnection, buff, strlen(buff), flags);
+
             if (data_sent < 0){
                     fprintf(stderr, "Error: Failed to reply to client\n");
             }else{
