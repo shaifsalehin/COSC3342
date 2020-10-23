@@ -20,7 +20,7 @@ int main (int argc, char **argv){
     /* prints more text if true */
     bool verbose = true;
 
-    /* true - deals one card a second, false - deals all the cards at once, */
+    /* true - deals one card a second, false - deals all the cards at once  */
     /* in its own line, might be necessary to turn on for slow connections  */
     bool slowDeal = false;
 
@@ -30,17 +30,11 @@ int main (int argc, char **argv){
    
     struct sockaddr_in server_addr;
     
-    int flags,backlog,clientConnection = 0, sock_fd = 0;
-    int cards[52];
-    
-
-    unsigned short int port_num;
-
-    char buffer[1024], buff[1024];
-
+    int flags,backlog,clientConnection = 0, sock_fd = 0, cards[52];
+    unsigned short port_num = atoi(argv[1]);
     size_t server_len = sizeof(server_addr);
-
-    port_num = atoi(argv[1]);   
+    
+    char buffer[1024], buff[1024];
     
     /* check if port number is entered */
     if (argc <= 1){
@@ -111,7 +105,7 @@ int main (int argc, char **argv){
             }
 
             /* create read function */
-            if(read (clientConnection, buffer, sizeof(buffer)))
+            if(!(read (clientConnection, buffer, sizeof(buffer))))
                     fprintf(stderr, "Read error encountered\n");
             
             
