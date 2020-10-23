@@ -11,25 +11,38 @@
 
 extern int randperm(int *, int);
 
+void send_data (int , char * , int , int );
+
 int main (int argc, char **argv){
+
+    
+/********************************/// USER SETTINGS ///*********************************/    
+    /* prints more text if true */
+    bool verbose = true;
+
+    /* true - deals one card a second, false - deals all the cards at once, */
+    /* in its own line, might be necessary to turn on for slow connections  */
+    bool slowDeal = false;
+
+    /* The word that prompts the server to begin dealing */
+    const char *word = "Deal";
+/***************************************************************************************/    
+   
     struct sockaddr_in server_addr;
     
     int flags,backlog,clientConnection = 0, sock_fd = 0;
     int cards[52];
     
-    ssize_t data_sent;
-
-    char buffer[1024], buff[1024];
 
     unsigned short int port_num;
 
-    const char *word = "Deal";
+    char buffer[1024], buff[1024];
+
+    size_t server_len = sizeof(server_addr);
+
+    port_num = atoi(argv[1]);   
     
-    /* prints more text if true */
-    bool verbose = true;
-    
-    
-    /* error checking for port number */
+    /* check if port number is entered */
     if (argc <= 1){
        fprintf(stderr, "Error:Please provide port number\n");
        fprintf(stdout, "Usage ./Executable_name Port_number\n");
@@ -37,23 +50,21 @@ int main (int argc, char **argv){
        exit(1);
     }
 
-    /* check if number is typed (only checks for numbers, truncates any letters after the numbers) */
+    /* check if integer is typed (only checks for numbers, truncates any letters */
+    /* after the numbers)                                                        */
     if (isdigit(*argv[1]) == 0){
         fprintf(stderr, "Error: Invalid port number\n");
         fprintf(stdout, "Server cannot be started\n");
         exit(1);
     }
     
-    /* check port range 1 - 65535 */
+    /* check port range 1 - 65535, 0 is not valid with telnet or netcat */
     if ((atoi(argv[1]) < 1) || (atoi(argv[1]) > 65535)){
            fprintf(stderr, "Error: Port number must be in range 1 - 65,535\n");
            fprintf(stdout, "Server cannot be started\n"); 
            exit(1);
     }
      
-    size_t server_len = sizeof(server_addr);
-
-    port_num = atoi(argv[1]);   
      
     /* set up socket */
     if (!(sock_fd = socket(AF_INET,SOCK_STREAM,0))){
@@ -94,94 +105,101 @@ int main (int argc, char **argv){
 
             fprintf(stdout, "Connection successful\n");
             
-                if(verbose){
-                    fprintf(stdout, "Accept value: %d\n", clientConnection);
-                    fprintf(stdout,"Waiting for: '%s'\n", *&word);    
+            if(verbose){
+                fprintf(stdout, "Accept value: %d\n", clientConnection);
+                fprintf(stdout,"Waiting for: '%s'\n", *&word);    
             }
 
             /* create read function */
-            ssize_t data_read = read (clientConnection, buffer, sizeof(buffer));
+            if(read (clientConnection, buffer, sizeof(buffer)))
+                    fprintf(stderr, "Read error encountered\n");
+            
             
             /* check for and strip new line and carriage return in buffer */ 
             buffer[strcspn(buffer, "\r\n")] = 0;
 
-            if(verbose){
-                fprintf(stdout,"Client sent: '%s'\n",buffer);
-            }
-
+            if(verbose) fprintf(stdout,"Client sent: '%s'\n",buffer);
+           
+            /* compare command sent from client with 'word' */
             int check_string = strcmp(buffer, word);
             
-            if(verbose){
-                printf("check string: %d\n",check_string);
+            if(verbose) fprintf(stdout, "check string: %d\n",check_string);
 
             /* server response to command received */
-            }   
             if (check_string == 0){
-                if (verbose){
-                    fprintf(stdout, "Match found\n");
-                }
+                if (verbose) fprintf(stdout, "Match found\n");
+               
                 fprintf(stdout, "Sending reply: Begin dealing\n");
-                sprintf(buff, "Server: Begin dealing\n"); 
-                data_sent = send(clientConnection, buff, strlen(buff), flags);
-
+                sprintf(buff, "Server: Begin dealing\r\n"); 
+                fprintf(stdout, "Sending cards to client...\n");
+                send_data(clientConnection, buff, strlen(buff), flags);
+                
+                /* loop to populate the cards array with numbers 1 - 52 */
                 for (int i = 0; i <= 52; i++)
                     cards[i]=i+1;
-                
+
+                /* perform random permutation function from randperm.c */
                 randperm(cards, 52);
 
+                /* begin dealing cards, one at a time until deck is empty */
                 for (int j = 0; j <= 51; j++){
                     if (verbose){ 
                         if(j < 9) 
-                                fprintf(stdout, "Card  %d: %d\n", j+1, cards[j]);
+                            fprintf(stdout, "Card  %d: %d\n", j+1, cards[j]);
                         else      
-                                fprintf(stdout, "Card %d: %d\n", j+1, cards[j]);
+                            fprintf(stdout, "Card %d: %d\n", j+1, cards[j]);
                     }
-                if(j < 9){
-                    sprintf(buff, "Card  %d: %d\n", j+1, cards[j]);
-                    data_sent = send(clientConnection, buff, strlen(buff), flags);
-                    if (data_sent < 0) break;
-                    sleep(1);
-                }else{
-                    sprintf(buff, "Card %d: %d\n", j+1, cards[j]);
-                    data_sent = send(clientConnection, buff, strlen(buff), flags);
-                    if (data_sent < 0) break;
-                    sleep(1);
-                }
-            }
-            break;
 
-            }else{
-                if (verbose){
-                    fprintf(stdout, "Could not find match\n");
+                    /* cleaner look, for cards 1-9, the format is Card  #: # */
+                    /* (double space)                                        */
+                    if(j < 9){
+                        sprintf(buff, "Card  %d: %d\r\n", j+1, cards[j]);
+                        send_data(clientConnection, buff, strlen(buff), flags);
+                        
+                        if (slowDeal) sleep(1);
+
+                    /* cards 10-52, format is Cards #: # (single space) */
+                    }else{
+                        sprintf(buff, "Card %d: %d\r\n", j+1, cards[j]);
+                        send_data(clientConnection, buff, strlen(buff), flags);
+                        
+                        if (slowDeal) sleep(1);
+                    }
                 }
+                break;
+
+            /* If the correct command is not sent */
+            }else{
+                if (verbose) fprintf(stdout, "Could not find match\n");
+                
                 fprintf(stdout, "Sending reply: Invalid command\n");
-            }
-            
-            /* create send function to send message to client */
-            sprintf(buff, "Server: Invalid command\n");
-            data_sent = send(clientConnection, buff, strlen(buff), flags);
-
-            if (data_sent < 0){
-                    fprintf(stderr, "Error: Failed to reply to client\n");
-            }else{
-                        fprintf(stdout, "Reply sent successfully\n");
+                sprintf(buff, "Server: Invalid command\r\n");
+                send_data(clientConnection, buff, strlen(buff), flags);
             }
             break;
         }
     }
     
-    if(verbose){
-        fprintf(stdout, "Shutting down server\n");
-     }
+    /* Broadcast the shutting down of server */
+    if(verbose) fprintf(stdout, "Shutting down server\n");
+    sprintf(buff, "Server: Closing connection\r\n");
+    send_data(clientConnection, buff, strlen(buff), flags);
+    fprintf(stdout, "====================================\n");
     
-    sprintf(buff, "Server: Closing connection\n");
-    data_sent = send(clientConnection, buff, strlen(buff), flags);
-
-
+    /* Shutdown connection */
     fflush(stdin);
     fflush(stdout);   
     close(clientConnection);
     shutdown(clientConnection, 2);
-    fprintf(stdout, "====================================\n");
+    
     return 0;
+}
+
+/* Send function with error checking if sending fails */
+void send_data (int client, char * msg, int msglen, int fl){
+
+        if ((send(client, msg, msglen, fl)) < 0){
+                fprintf(stderr, "Error sending data\n");
+                exit(1);
+        }
 }
