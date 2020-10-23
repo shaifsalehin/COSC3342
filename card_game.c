@@ -14,9 +14,6 @@
  *
  *********************************************************************************************************/
 
-
-
-
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/socket.h>
@@ -51,7 +48,7 @@ int main (int argc, char **argv){
    
     struct sockaddr_in server_addr;
     
-    int flags,backlog,clientConnection = 0, sock_fd = 0, cards[52];
+    int flags,backlog,clientConnection, sock_fd = 0, cards[52];
     size_t server_len = sizeof(server_addr);
     unsigned short port_num;
 
@@ -62,6 +59,7 @@ int main (int argc, char **argv){
        exit(1);
     }     
     
+    /* assigns arvg[1] to port_num after conversion from string to int */
     port_num = atoi(*&argv[1]);
     
     /* set up socket */
