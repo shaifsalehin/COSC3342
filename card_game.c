@@ -1,3 +1,22 @@
+/*********************************************************************************************************
+ *                                          Shaif Salehin
+ *                           
+ *                                        Project Description 
+ * Opens a server and waits for the word 'Deal' (case sensitive) from a client, the server then
+ * opens a deck of playing cards, randomizes them and begins dealing to the server until the 
+ * deck is empty, then server shuts down. 
+ *
+ *                                            Functions
+ * > extern int randperm - performs randomization and permutation of an array
+ * > void send_data - sends everything stored in buff to client, and has an error check if send fails
+ * > int arg_check  - validates arguments passed with the program
+ * > int main - main function
+ *
+ *********************************************************************************************************/
+
+
+
+
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/socket.h>
@@ -26,7 +45,7 @@ int main (int argc, char **argv){
     /* in its own line, might be necessary to turn on for slow connections  */
     bool slowDeal = true;
 
-    /* The word that prompts the server to begin dealing */
+    /* The word (case sensitive) that prompts the server to begin dealing */
     const char *word = "Deal";
 /***************************************************************************************/    
    
@@ -184,7 +203,7 @@ void send_data (int client, char * msg, int msglen, int fl){
 }
 
 /* checks the validity of the arguments, program ends if */
-/* invalid argumenets are given                          */
+/* invalid arguments are given                           */
 int arg_check(int argc, char *argv[]){
 
 
