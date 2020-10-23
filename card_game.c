@@ -31,19 +31,20 @@ int main (int argc, char **argv){
     struct sockaddr_in server_addr;
     
     int flags,backlog,clientConnection = 0, sock_fd = 0, cards[52];
-    unsigned short port_num = atoi(*&argv[1]);
     size_t server_len = sizeof(server_addr);
     
     char buffer[1024], buff[1024];
     
     /* check if port number is entered */
     if (argc <= 1){
-       fprintf(stderr, "Error:Please provide port number\n");
-       fprintf(stdout, "Usage ./Executable_name Port_number\n");
+       fprintf(stderr, "Error: Please provide port number\n");
+       fprintf(stdout, "Usage: ./Executable_name Port_number\n");
        fprintf(stdout, "Server cannot be started\n");         
        exit(1);
     }
 
+    unsigned short port_num = atoi(*&argv[1]);
+    
     /* check if integer is typed (only checks for numbers,  */
     /* truncates any letters after the numbers)             */
     if (isdigit(*argv[1]) == 0){
