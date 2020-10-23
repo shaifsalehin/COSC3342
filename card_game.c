@@ -13,6 +13,8 @@ extern int randperm(int *, int);
 
 void send_data (int , char * , int , int );
 
+int arg_check (int, char **);
+
 int main (int argc, char **argv){
 
     
@@ -22,7 +24,7 @@ int main (int argc, char **argv){
 
     /* true - deals one card a second, false - deals all the cards at once  */
     /* in its own line, might be necessary to turn on for slow connections  */
-    bool slowDeal = false;
+    bool slowDeal = true;
 
     /* The word that prompts the server to begin dealing */
     const char *word = "Deal";
@@ -32,35 +34,17 @@ int main (int argc, char **argv){
     
     int flags,backlog,clientConnection = 0, sock_fd = 0, cards[52];
     size_t server_len = sizeof(server_addr);
-    
+    unsigned short port_num;
+
     char buffer[1024], buff[1024];
     
-    /* check if port number is entered */
-    if (argc <= 1){
-       fprintf(stderr, "Error: Please provide port number\n");
-       fprintf(stdout, "Usage: ./Executable_name Port_number\n");
-       fprintf(stdout, "Server cannot be started\n");         
+    /* call arg_check function to make sure the correct arguments are passed */    
+    if (arg_check(argc, argv) == -1){
        exit(1);
-    }
-
-    unsigned short port_num = atoi(*&argv[1]);
+    }     
     
-    /* check if integer is typed (only checks for numbers,  */
-    /* truncates any letters after the numbers)             */
-    if (isdigit(*argv[1]) == 0){
-        fprintf(stderr, "Error: Invalid port number\n");
-        fprintf(stdout, "Server cannot be started\n");
-        exit(1);
-    }
+    port_num = atoi(*&argv[1]);
     
-    /* check port range 1 - 65535, 0 is not valid with telnet or netcat */
-    if ((port_num < 1) || (port_num > 65535)){
-           fprintf(stderr, "Error: Port number must be in range 1 - 65,535\n");
-           fprintf(stdout, "Server cannot be started\n"); 
-           exit(1);
-    }
-     
-     
     /* set up socket */
     if (!(sock_fd = socket(AF_INET,SOCK_STREAM,0))){
            fprintf(stderr, "Error: Socket failed\n");
@@ -193,8 +177,47 @@ int main (int argc, char **argv){
 /* Send function with error checking if sending fails */
 void send_data (int client, char * msg, int msglen, int fl){
 
-        if ((send(client, msg, msglen, fl)) < 0){
-                fprintf(stderr, "Error sending data\n");
-                exit(1);
-        }
+    if ((send(client, msg, msglen, fl)) < 0){
+        fprintf(stderr, "Error sending data\n");
+        exit(1);
+    }
+}
+
+/* checks the validity of the arguments, program ends if */
+/* invalid argumenets are given                          */
+int arg_check(int argc, char *argv[]){
+
+
+    /* check if port number is entered */
+    if (argc <= 1){
+       fprintf(stderr, "Error: Please provide port number\n");
+       fprintf(stdout, "Usage: ./Executable_name Port_number\n");
+       fprintf(stdout, "Server cannot be started\n");         
+       
+       return -1;
+    }
+
+    /* prevents segmentation faults if no arguments are given */
+    if (argc > 1){
+
+    /* check if integer is typed (only checks for numbers,  */
+    /* truncates any letters after the numbers)             */
+    if (isdigit(*argv[1]) == 0){
+        fprintf(stderr, "Error: Invalid port number\n");
+        fprintf(stdout, "Server cannot be started\n");
+            
+        return -1;
+          
+     }
+     
+     /* check port range 1 - 65535, 0 is not valid with telnet or netcat */
+     if ((atoi(argv[1]) < 1) || (atoi(argv[1]) > 65535)){
+        fprintf(stderr, "Error: Port number must be in range 1 - 65,535\n");
+        fprintf(stdout, "Server cannot be started\n"); 
+           
+        return -1;
+      }  
+    }
+    
+      return 0;
 }
