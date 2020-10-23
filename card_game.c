@@ -132,14 +132,22 @@ int main (int argc, char **argv){
                 randperm(cards, 52);
 
                 for (int j = 0; j <= 51; j++){
-                    if (verbose) 
-                        fprintf(stdout, "Card %d: %d\n", j+1, cards[j]);
-
+                    if (verbose){ 
+                        if(j < 9) 
+                                fprintf(stdout, "Card  %d: %d\n", j+1, cards[j]);
+                        else      
+                                fprintf(stdout, "Card %d: %d\n", j+1, cards[j]);
+                    }
+                if(j < 9){
+                    sprintf(buff, "Card  %d: %d\n", j+1, cards[j]);
+                    data_sent = send(clientConnection, buff, strlen(buff), flags);
+                    sleep(1);
+                }else{
                     sprintf(buff, "Card %d: %d\n", j+1, cards[j]);
                     data_sent = send(clientConnection, buff, strlen(buff), flags);
                     sleep(1);
-
                 }
+            }
             break;
 
             }else{
