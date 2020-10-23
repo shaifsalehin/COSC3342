@@ -31,7 +31,7 @@ int main (int argc, char **argv){
     struct sockaddr_in server_addr;
     
     int flags,backlog,clientConnection = 0, sock_fd = 0, cards[52];
-    unsigned short port_num = atoi(argv[1]);
+    unsigned short port_num = atoi(*&argv[1]);
     size_t server_len = sizeof(server_addr);
     
     char buffer[1024], buff[1024];
@@ -44,8 +44,8 @@ int main (int argc, char **argv){
        exit(1);
     }
 
-    /* check if integer is typed (only checks for numbers, truncates any letters */
-    /* after the numbers)                                                        */
+    /* check if integer is typed (only checks for numbers,  */
+    /* truncates any letters after the numbers)             */
     if (isdigit(*argv[1]) == 0){
         fprintf(stderr, "Error: Invalid port number\n");
         fprintf(stdout, "Server cannot be started\n");
@@ -53,7 +53,7 @@ int main (int argc, char **argv){
     }
     
     /* check port range 1 - 65535, 0 is not valid with telnet or netcat */
-    if ((atoi(argv[1]) < 1) || (atoi(argv[1]) > 65535)){
+    if ((port_num < 1) || (port_num > 65535)){
            fprintf(stderr, "Error: Port number must be in range 1 - 65,535\n");
            fprintf(stdout, "Server cannot be started\n"); 
            exit(1);
@@ -129,14 +129,14 @@ int main (int argc, char **argv){
                 send_data(clientConnection, buff, strlen(buff), flags);
                 
                 /* loop to populate the cards array with numbers 1 - 52 */
-                for (int i = 0; i <= 52; i++)
+                for (int i = 0; i < 52; i++)
                     cards[i]=i+1;
 
                 /* perform random permutation function from randperm.c */
                 randperm(cards, 52);
 
                 /* begin dealing cards, one at a time until deck is empty */
-                for (int j = 0; j <= 51; j++){
+                for (int j = 0; j < 52; j++){
                     if (verbose){ 
                         if(j < 9) 
                             fprintf(stdout, "Card  %d: %d\n", j+1, cards[j]);
