@@ -3,7 +3,7 @@
  *                           
  *                                        Project Description 
  * Opens a server and waits for the word 'Deal' (case sensitive) from a client, the server then
- * opens a deck of playing cards, randomizes them and begins dealing to the server until the 
+ * opens a deck of playing cards, randomizes them and begins dealing to the client until the 
  * deck is empty, then server shuts down. 
  *
  *                                            Functions
