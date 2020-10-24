@@ -219,20 +219,20 @@ int arg_check(int argc, char *argv[]){
 
     /* check if integer is typed (only checks for numbers,  */
     /* truncates any letters after the numbers)             */
-    if (isdigit(*argv[1]) == 0){
-        fprintf(stderr, "Error: Invalid port number\n");
-        fprintf(stdout, "Server cannot be started\n");
+        if (isdigit(*argv[1]) == 0){
+            fprintf(stderr, "Error: Invalid port number\n");
+            fprintf(stdout, "Server cannot be started\n");
             
-        return -1;       
-     }
+            return -1;       
+        }
      
      /* check port range 1 - 65535, 0 is not valid with telnet or netcat */
-     if ((atoi(argv[1]) < 1) || (atoi(argv[1]) > 65535)){
-        fprintf(stderr, "Error: Port number must be in range 1 - 65,535\n");
-        fprintf(stdout, "Server cannot be started\n"); 
+        if ((atoi(argv[1]) < 1) || (atoi(argv[1]) > 65535)){
+            fprintf(stderr, "Error: Port number must be in range 1 - 65,535\n");
+            fprintf(stdout, "Server cannot be started\n"); 
            
-        return -1;
-      }  
+            return -1;
+        }  
     }
     
       return 0;
