@@ -38,8 +38,8 @@ int main (int argc, char **argv){
     /* prints more text if true */
     bool verbose = true;
 
-    /* true - deals one card a second, false - deals all the cards at once  */
-    /* in its own line, might be necessary to turn on for slow connections  */
+    /* true - deals one card a second, false - deals all the cards at once,      */
+    /* each in its own line, might be necessary to turn on for slow connections  */
     bool slowDeal = true;
 
     /* The word (case sensitive) that prompts the server to begin dealing */
@@ -48,7 +48,7 @@ int main (int argc, char **argv){
    
     struct sockaddr_in server_addr;
     
-    int flags,backlog,clientConnection, sock_fd = 0, cards[52];
+    int flags, backlog, clientConnection, sock_fd = 0, cards[52];
     size_t server_len = sizeof(server_addr);
     unsigned short port_num;
 
@@ -200,8 +200,8 @@ void send_data (int client, char * msg, int msglen, int fl){
     }
 }
 
-/* checks the validity of the arguments, program ends if */
-/* invalid arguments are given                           */
+/* checks the validity of the command line arguments passed,  */
+/* returns -1 if invalid arguments are found, else returns 0  */    
 int arg_check(int argc, char *argv[]){
 
 
@@ -223,8 +223,7 @@ int arg_check(int argc, char *argv[]){
         fprintf(stderr, "Error: Invalid port number\n");
         fprintf(stdout, "Server cannot be started\n");
             
-        return -1;
-          
+        return -1;       
      }
      
      /* check port range 1 - 65535, 0 is not valid with telnet or netcat */
