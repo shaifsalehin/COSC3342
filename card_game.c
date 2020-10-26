@@ -112,7 +112,7 @@ int main (int argc, char **argv){
             
             
             /* check for and strip new line and carriage return in buffer */ 
-            buffer[strcspn(buffer, "\r\n")] = 0;
+//            buffer[strcspn(buffer, "\r\n")] = 0;
 
             if(verbose) fprintf(stdout,"Client sent: '%s'\n",buffer);
            
