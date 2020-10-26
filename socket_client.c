@@ -13,51 +13,58 @@ void send_data(int , char * , int , int );
 
 int main(int argc, char ** argv){
 
-        struct sockaddr_in server_addr;
+        struct sockaddr_in client_addr;
 
-        int flags, sock_fd =0;
+        int flags, rec = 1, sock_fd =0;
         unsigned short port_num;
-        size_t server_len = sizeof(server_addr);
+        size_t client_len = sizeof(client_addr);
         char buffer[1024] = {0};
-        char temp[5] = "Deal"; 
+        char temp[4] = "Deal"; 
         
-        port_num = 9000;
+        port_num = atoi(*&argv[1]);
 
     if (!(sock_fd = socket(AF_INET,SOCK_STREAM,0))){
            fprintf(stderr, "Error: Socket failed\n");
            fprintf(stdout, "Server cannot be started\n");
            exit(1);
     }
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    server_addr.sin_port = htons(port_num);
+    client_addr.sin_family = AF_INET;
+    client_addr.sin_port = htons(port_num);
     
-    if (inet_pton(AF_INET, "127.0.0.1", &server_addr.sin_addr)<=0)
+    if (inet_pton(AF_INET, "127.0.0.1", &client_addr.sin_addr)<=0)
     {
             fprintf(stderr,"Invalid address\n");
             exit(1);
     }
-    
-    if (connect(sock_fd, (const struct sockaddr *) &server_addr, server_len) <0){
+
+        if (connect(sock_fd, (const struct sockaddr *) &client_addr, client_len) <0){
             fprintf(stderr,"Error: Connection error\n");
             exit(1);
-    }
-    
-    temp[strlen("Deal")] = 0;
+        }
 
-    send_data(sock_fd, temp, strlen(temp), flags);
+
+        temp[strlen("Deal")] = 0;
+        send_data(sock_fd, temp, strlen(temp), flags);
+
+    while(1){
+
     
-    if (recv(sock_fd, buffer, sizeof(buffer), flags)<0){
+        if (!(recv(sock_fd, buffer, sizeof(buffer[strlen(buffer)]), 0))){
             fprintf(stderr, "Error: Receive error\n");
             exit(1);
-    }else{
+
+        }else{
+
             fprintf(stdout, "%s", buffer);
+
+        }
     }
-
-        return 0;
+    
+    fflush(stdin);
+    return 0;
 }
-
 /* Send function with error checking if sending fails */
+
 void send_data (int client, char * msg, int msglen, int fl){
 
     if ((send(client, msg, msglen, fl)) < 0){

@@ -52,7 +52,7 @@ int main (int argc, char **argv){
     size_t server_len = sizeof(server_addr);
     unsigned short port_num;
 
-    char buffer[1024], buff[1024];
+    char buffer[1024] = {0}, buff[1024] = {0};
     
     /* call arg_check function to make sure the correct arguments are passed */    
     if (arg_check(argc, argv) == -1){
@@ -112,7 +112,7 @@ int main (int argc, char **argv){
             
             
             /* check for and strip new line and carriage return in buffer */ 
-//            buffer[strcspn(buffer, "\r\n")] = 0;
+            buffer[strcspn(buffer, "\r\n")] = 0;
 
             if(verbose) fprintf(stdout,"Client sent: '%s'\n",buffer);
            
@@ -126,10 +126,11 @@ int main (int argc, char **argv){
                 if (verbose) fprintf(stdout, "Match found\n");
                
                 fprintf(stdout, "Sending reply: Begin dealing\n");
-                sprintf(buff, "Server: Begin dealing\r\n"); 
+                sprintf(buff, "Server: Begin dealing\n"); 
                 fprintf(stdout, "Sending cards to client...\n");
                 send_data(clientConnection, buff, strlen(buff), flags);
                 
+                fflush(stdout);                
                 /* loop to populate the cards array with numbers 1 - 52 */
                 for (int i = 0; i < 52; i++)
                     cards[i]=i+1;
@@ -149,16 +150,20 @@ int main (int argc, char **argv){
                     /* cleaner look, for cards 1-9, the format is Card  #: # */
                     /* (double space)                                        */
                     if(j < 9){
-                        sprintf(buff, "Card  %d: %d\r\n", j+1, cards[j]);
+                        sprintf(buff, "Card  %d: %d\n", j+1, cards[j]);
                         send_data(clientConnection, buff, strlen(buff), flags);
+                        
+                        fflush(stdout);                        
                         
                         if (slowDeal) sleep(1);
 
                     /* cards 10-52, format is Cards #: # (single space) */
                     }else{
-                        sprintf(buff, "Card %d: %d\r\n", j+1, cards[j]);
+                        sprintf(buff, "Card %d: %d\n", j+1, cards[j]);
                         send_data(clientConnection, buff, strlen(buff), flags);
                         
+                        fflush(stdout);
+
                         if (slowDeal) sleep(1);
                     }
                 }
@@ -169,7 +174,7 @@ int main (int argc, char **argv){
                 if (verbose) fprintf(stdout, "Could not find match\n");
                 
                 fprintf(stdout, "Sending reply: Invalid command\n");
-                sprintf(buff, "Server: Invalid command\r\n");
+                sprintf(buff, "Server: Invalid command\n");
                 send_data(clientConnection, buff, strlen(buff), flags);
             }
             break;
@@ -178,7 +183,7 @@ int main (int argc, char **argv){
     
     /* Broadcast the shutting down of server */
     if(verbose) fprintf(stdout, "Shutting down server\n");
-    sprintf(buff, "Server: Closing connection\r\n");
+    sprintf(buff, "Server: Closing connection\n");
     send_data(clientConnection, buff, strlen(buff), flags);
     fprintf(stdout, "====================================\n");
     
