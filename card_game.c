@@ -40,7 +40,7 @@ int main (int argc, char **argv){
 
     /* true - deals one card a second, false - deals all the cards at once,      */
     /* each in its own line, might be necessary to turn on for slow connections  */
-    bool slowDeal = true;
+    bool slowDeal = false;
 
     /* The word (case sensitive) that prompts the server to begin dealing */
     const char *word = "Deal";
