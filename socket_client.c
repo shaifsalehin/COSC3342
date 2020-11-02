@@ -84,7 +84,7 @@ int arg_check(int argc, char *argv[]){
     /* check if port number is entered */
     if (argc != 3){
        fprintf(stderr, "Error: Please provide port number\n");
-       fprintf(stdout, "Usage: ./Executable_name Port_number\n");
+       fprintf(stdout, "Usage: ./Executable_name Port_number Server_IP\n");
        fprintf(stdout, "Server cannot be started\n");         
        
        return -1;

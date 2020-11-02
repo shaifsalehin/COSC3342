@@ -49,7 +49,7 @@ int main (int argc, char **argv){
     struct sockaddr_in server_addr;
     
     int flags, backlog, clientConnection, sock_fd = 0, cards[52];
-    size_t server_len = sizeof(server_addr);
+    int server_len = sizeof(server_addr);
     unsigned short port_num;
 
     char buffer[1024] = {0}, buff[1024] = {0};
