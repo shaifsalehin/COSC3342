@@ -27,7 +27,7 @@
 
 extern int randperm(int *, int);
 
-void send_data (int , char * , int , int );
+void send_data (int , void * , int , int );
 
 int arg_check (int, char **);
 
@@ -90,10 +90,10 @@ int main (int argc, char **argv){
         fprintf(stdout, "Waiting for connection...\n");
         fprintf(stdout, "====================================\n");
   
-    while(1){
+ //   while(1){
 
         /* create connection from client */
-        if (!(clientConnection = (accept (sock_fd, (struct sockaddr *) &server_addr, &server_len)))){
+        if ((clientConnection = (accept (sock_fd, (struct sockaddr *) &server_addr, &server_len)))== -1){
             fprintf(stderr, "Error: Accept failed\n");
             fprintf(stdout, "Connection cannot be established\n"); 
   
@@ -126,9 +126,9 @@ int main (int argc, char **argv){
                 if (verbose) fprintf(stdout, "Match found\n");
                
                 fprintf(stdout, "Sending reply: Begin dealing\n");
-                sprintf(buff, "Server: Begin dealing\n"); 
+           //     sprintf(buff, "Server: Begin dealing\n"); 
                 fprintf(stdout, "Sending cards to client...\n");
-                send_data(clientConnection, buff, strlen(buff), flags);
+              //  send_data(clientConnection, buff, strlen(buff), flags);
                 
                 fflush(stdout);                
                 /* loop to populate the cards array with numbers 1 - 52 */
@@ -139,52 +139,52 @@ int main (int argc, char **argv){
                 randperm(cards, 52);
 
                 /* begin dealing cards, one at a time until deck is empty */
-                for (int j = 0; j < 52; j++){
-                    if (verbose){ 
-                        if(j < 9) 
-                            fprintf(stdout, "Card  %d: %d\n", j+1, cards[j]);
-                        else      
-                            fprintf(stdout, "Card %d: %d\n", j+1, cards[j]);
-                    }
+               // for (int j = 0; j < 52; j++){
+                 //   if (verbose){ 
+                 //       if(j < 9) 
+                 //           fprintf(stdout, "Card  %d: %d\n", j+1, cards[j]);
+                  //      else      
+                   //         fprintf(stdout, "Card %d: %d\n", j+1, cards[j]);
+                   // }
 
                     /* cleaner look, for cards 1-9, the format is Card  #: # */
+                        //sprintf(buff, "%d\n", cards);
                     /* (double space)                                        */
-                    if(j < 9){
-                        sprintf(buff, "Card  %d: %d\n", j+1, cards[j]);
-                        send_data(clientConnection, buff, strlen(buff), flags);
+                 //       sprintf(buff, "%d\n", cards[j]);
+                        struct deck
+                        {
+                                int the_cards[52];
+                        };
+                        struct deck the_deck;
+
+                        send_data(clientConnection, &the_deck, sizeof(the_deck), flags);
                         
                         fflush(stdout);                        
                         
                         if (slowDeal) sleep(1);
 
                     /* cards 10-52, format is Cards #: # (single space) */
-                    }else{
-                        sprintf(buff, "Card %d: %d\n", j+1, cards[j]);
-                        send_data(clientConnection, buff, strlen(buff), flags);
                         
-                        fflush(stdout);
 
-                        if (slowDeal) sleep(1);
-                    }
-                }
-                break;
+               //}
+   //             break;
 
             /* If the correct command is not sent */
             }else{
                 if (verbose) fprintf(stdout, "Could not find match\n");
                 
                 fprintf(stdout, "Sending reply: Invalid command\n");
-                sprintf(buff, "Server: Invalid command\n");
-                send_data(clientConnection, buff, strlen(buff), flags);
+              //  sprintf(buff, "Server: Invalid command\n");
+             //   send_data(clientConnection, buff, strlen(buff), flags);
             }
-            break;
-        }
+      //      break;
+     //   }
     }
     
     /* Broadcast the shutting down of server */
     if(verbose) fprintf(stdout, "Shutting down server\n");
-    sprintf(buff, "Server: Closing connection\n");
-    send_data(clientConnection, buff, strlen(buff), flags);
+   // sprintf(buff, "Server: Closing connection\n");
+  //  send_data(clientConnection, buff, strlen(buff), flags);
     fprintf(stdout, "====================================\n");
     
     /* Shutdown connection */
@@ -197,12 +197,16 @@ int main (int argc, char **argv){
 }
 
 /* Send function with error checking if sending fails */
-void send_data (int client, char * msg, int msglen, int fl){
-
-    if ((send(client, msg, msglen, fl)) < 0){
+void send_data (int client, void * msg, int msglen, int fl){
+    
+    int len;
+    if ((len=send(client, msg, msglen, fl)) < 0){
         fprintf(stderr, "Error sending data\n");
         exit(1);
+    }else{
+        fprintf(stdout, "%d\n", len);
     }
+    
 }
 
 /* checks the validity of the command line arguments passed,  */

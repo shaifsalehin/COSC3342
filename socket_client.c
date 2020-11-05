@@ -12,11 +12,22 @@
 void send_data(int , char * , int , int );
 int arg_check(int, char **);
 
+enum suits{spades, hearts, diamonds, clubs};
+enum cards{ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king};
+//struct card
+//{
+//        int suit card_suit;
+//        int value card_value;
+//};
+
 int main(int argc, char ** argv){
+
+//    struct card parse_card(int the_card);
+  //  temp_card.suit
 
     struct sockaddr_in client_addr;
 
-    int flags, rec = 1, sock_fd =0;
+    int rec, flags, sock_fd =0;
     unsigned short port_num;
     size_t client_len = sizeof(client_addr);
     char buffer[1024] = {0};
@@ -49,19 +60,20 @@ int main(int argc, char ** argv){
         temp[strlen("Deal")] = 0;
         send_data(sock_fd, temp, strlen(temp), flags);
 
-    while(1){
+    //while(1){
 
     
-        if (!(recv(sock_fd, buffer, sizeof(buffer[strlen(buffer)]), 0))){
+        if ((rec = recv(sock_fd, buffer, 1024, 0))== -1){
             fprintf(stderr, "Error: Receive error\n");
             exit(1);
 
         }else{
 
-            fprintf(stdout, "%s", buffer);
+      //      fprintf(stdout, "%s", buffer);
+            fprintf(stdout, "%d\n", rec);
 
         }
-    }
+    //}
     
     fflush(stdin);
     return 0;
